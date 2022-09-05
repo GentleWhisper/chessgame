@@ -2,36 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ChessGame</title>
     <link rel="stylesheet"
           href="css/chessboard-1.0.0.min.css">
 </head>
 <body>
-<div id="myBoard" style="width: 400px"></div>
-<label>Status:</label>
-<div id="status"></div>
-<label>FEN:</label>
-<div id="fen"></div>
-<label>PGN:</label>
-<div id="pgn"></div>
+<div id="myBoard" style="width: 980px; position: absolute;  top:0;right:0; bottom:0; left:0;"></div>
 
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
-        crossorigin="anonymous"></script>
-
-<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
-        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
-        crossorigin="anonymous"></script>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/chessboard.js"></script>
 <script src="js/chess.js"></script>
+
 <script>
-    // NOTE: this example uses the chess.js library:
-    // https://github.com/jhlywa/chess.js
 
     var board = null
     var game = new Chess()
 
-    function onDragStart (source, piece, position, orientation) {
+    function onDragStart(source, piece, position, orientation) {
+        console.log("onDragStart", source, piece, position, orientation)
         // do not pick up pieces if the game is over
         if (game.game_over()) return false
 
@@ -39,7 +27,7 @@
         if (piece.search(/^b/) !== -1) return false
     }
 
-    function makeRandomMove () {
+    function makeRandomMove() {
         var possibleMoves = game.moves()
 
         // game over
@@ -50,7 +38,8 @@
         board.position(game.fen())
     }
 
-    function onDrop (source, target) {
+    function onDrop(source, target) {
+        console.log("OnDrop", source, target)
         // see if the move is legal
         var move = game.move({
             from: source,
@@ -67,8 +56,13 @@
 
     // update the board position after the piece snap
     // for castling, en passant, pawn promotion
-    function onSnapEnd () {
+    function onSnapEnd() {
+        console.log("onSnapEnd")
         board.position(game.fen())
+    }
+
+    function onMouseClick() {
+        console.log("onMouseClick")
     }
 
     var config = {
@@ -76,7 +70,8 @@
         position: 'start',
         onDragStart: onDragStart,
         onDrop: onDrop,
-        onSnapEnd: onSnapEnd
+        onSnapEnd: onSnapEnd,
+        onMouseClick: onMouseClick
     }
     board = Chessboard('myBoard', config)
 </script>
